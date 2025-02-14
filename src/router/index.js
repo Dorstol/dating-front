@@ -3,6 +3,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import SwipeView from '@/views/SwipeView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import LoginView from '@/views/LoginView.vue'
+import EditProfileView from '@/views/EditProfileView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
+    },
+    {
+      path: '/profile/edit',
+      name: 'edit-profile',
+      component: EditProfileView,
     },
     {
       path: '/swipe',
