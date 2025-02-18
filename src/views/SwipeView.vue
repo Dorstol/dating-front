@@ -1,46 +1,65 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-pink-700 flex items-center justify-center p-8">
-    <div
-      v-if="currentSuggestion"
-      :class="[
-        'card-container w-full max-w-sm bg-gray-900/80 rounded-3xl p-6 backdrop-blur-sm border border-purple-500/30',
-        cardAnimationClass
-      ]"
-    >
-      <!-- Display user photo if available -->
-      <img
-        v-if="currentSuggestion.photo"
-        :src="`http://localhost:8000/static/photos/${currentSuggestion.photo}`"
-        alt="User Photo"
-        class="w-full h-64 object-cover rounded-3xl"
-      />
-      <!-- User details -->
-      <div class="mt-4">
-        <h2 class="text-2xl font-bold text-white">{{ currentSuggestion.email }}</h2>
-        <p class="text-white mt-2">Age: {{ currentSuggestion.age }}</p>
-        <p class="text-white">Gender: {{ currentSuggestion.gender }}</p>
-        <p class="text-white">Interest: {{ currentSuggestion.interest }}</p>
-        <p class="text-gray-300 mt-2">{{ currentSuggestion.bio }}</p>
+  <div class="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-pink-700 p-8 relative">
+    <!-- Navigation Bar: Positioned at the top-right -->
+    <nav class="absolute top-4 right-8 flex space-x-4">
+      <router-link
+        to="/profile"
+        class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+      >
+        Profile
+      </router-link>
+      <router-link
+        to="/chats"
+        class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+      >
+        Chats
+      </router-link>
+    </nav>
+
+    <!-- Centered User Card Container -->
+    <div class="flex items-center justify-center min-h-screen">
+      <div
+        v-if="currentSuggestion"
+        :class="[
+          'card-container w-full max-w-sm bg-gray-900/80 rounded-3xl p-6 backdrop-blur-sm border border-purple-500/30',
+          cardAnimationClass
+        ]"
+      >
+        <!-- Display user photo if available -->
+        <img
+          v-if="currentSuggestion.photo"
+          :src="`http://localhost:8000/static/photos/${currentSuggestion.photo}`"
+          alt="User Photo"
+          class="w-full h-64 object-cover rounded-3xl"
+        />
+        <!-- User details -->
+        <div class="mt-4">
+          <h2 class="text-2xl font-bold text-white">{{ currentSuggestion.email }}</h2>
+          <p class="text-white mt-2">Age: {{ currentSuggestion.age }}</p>
+          <p class="text-white">Gender: {{ currentSuggestion.gender }}</p>
+          <p class="text-white">Interest: {{ currentSuggestion.interest }}</p>
+          <p class="text-gray-300 mt-2">{{ currentSuggestion.bio }}</p>
+        </div>
+        <!-- Like and Dislike buttons -->
+        <div class="flex justify-around mt-6">
+          <button
+            @click="handleDislike"
+            class="px-6 py-3 bg-gradient-to-r from-red-400 to-red-600 rounded-full text-white font-bold hover:opacity-90 transition-all"
+          >
+            Dislike
+          </button>
+          <button
+            @click="handleLike"
+            class="px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full text-white font-bold hover:opacity-90 transition-all"
+          >
+            Like
+          </button>
+        </div>
       </div>
-      <!-- Like and Dislike buttons -->
-      <div class="flex justify-around mt-6">
-        <button
-          @click="handleDislike"
-          class="px-6 py-3 bg-gradient-to-r from-red-400 to-red-600 rounded-full text-white font-bold hover:opacity-90 transition-all"
-        >
-          Dislike
-        </button>
-        <button
-          @click="handleLike"
-          class="px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full text-white font-bold hover:opacity-90 transition-all"
-        >
-          Like
-        </button>
+      <!-- Loading state -->
+      <div v-else class="text-center text-white">
+        Loading...
       </div>
-    </div>
-    <!-- Loading state -->
-    <div v-else class="text-center text-white">
-      Loading...
     </div>
   </div>
 </template>
@@ -48,9 +67,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 // Reactive variable for an array of suggestions
 const suggestion = ref([])
@@ -130,14 +149,14 @@ async function handleDislike() {
 }
 
 onMounted(() => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')
   if (!token) {
     // Redirect to login if user is not authenticated.
     router.push('/login')
   } else {
     fetchSuggestion()
   }
-});
+})
 </script>
 
 <style scoped>

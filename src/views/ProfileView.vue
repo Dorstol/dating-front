@@ -4,13 +4,33 @@
     <div class="max-w-4xl mx-auto bg-gray-900/80 rounded-3xl p-8 backdrop-blur-sm border border-purple-500/30">
       <!-- Navigation -->
       <nav class="flex justify-between items-center mb-8">
-        <div class="flex space-x-6">
-          <router-link to="/" class="text-white/80 hover:text-white">Home</router-link>
-          <router-link to="/profile" class="text-white/80 hover:text-white">Profile</router-link>
-          <router-link to="/swipe" class="text-white/80 hover:text-white">Swipe</router-link>
-        </div>
+        <!-- Left Upper Corner: Styled Buttons -->
         <div class="flex space-x-4">
-          <!-- Logout button -->
+          <router-link
+            to="/chats"
+            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+          >
+            Chats
+          </router-link>
+          <router-link
+            to="/swipe"
+            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+          >
+            Swipe
+          </router-link>
+          <router-link
+            to="/profile/edit"
+            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+          >
+            Edit Profile
+          </router-link>
+        </div>
+        <!-- Right Side (optional, e.g., Logout button) -->
+        <div class="flex space-x-4">
+          <!-- Logout button example -->
+          <button class="px-4 py-2 bg-red-500 rounded-full text-white hover:bg-red-600 transition-all">
+            Logout
+          </button>
         </div>
       </nav>
 
@@ -27,16 +47,18 @@
                   alt="Profile"
                   class="w-full h-full object-cover"
                 />
+                <!-- Glowing ring effect -->
+                <div class="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 to-blue-500 animate-pulse opacity-50"></div>
               </div>
               <div class="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-2 border-gray-900"></div>
             </div>
             
             <div class="flex-1">
               <h1 class="text-3xl font-bold text-white mb-2">{{ user.email }}</h1>
-              <p class="text-blue-400">User Profile</p>
-              <button class="mt-4 px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white">
-                <router-link to="/profile/edit">Edit Profile</router-link>
-              </button>
+              <p class="text-blue-400">Age: {{ user.age }}</p>
+              <p class="text-blue-400">Gender: {{ user.gender }}</p>
+              <p class="text-blue-400">Interest: {{ user.interest }}</p>
+              <p class="text-blue-400">{{ user.bio }}</p>
             </div>
           </div>
 
@@ -101,7 +123,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 

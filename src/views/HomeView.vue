@@ -59,6 +59,19 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+onMounted(() => {
+  const token = localStorage.getItem('token')
+  // If token exists, the user is authenticated - redirect to /swipe.
+  if (token) {
+    router.push('/swipe')
+  }
+})
+
 const features = [
   {
     icon: "?",
