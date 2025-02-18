@@ -4,31 +4,28 @@
     <div class="max-w-4xl mx-auto bg-gray-900/80 rounded-3xl p-8 backdrop-blur-sm border border-purple-500/30">
       <!-- Navigation -->
       <nav class="flex justify-between items-center mb-8">
-        <!-- Left Upper Corner: Styled Buttons -->
+        <!-- Left Upper Corner: Branding -->
+        <div class="text-3xl font-bold text-white">
+          Dating
+        </div>
+        <!-- Right Upper Corner: Navigation Buttons -->
         <div class="flex space-x-4">
+          <router-link
+            to="/profile"
+            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+          >
+            Profile
+          </router-link>
           <router-link
             to="/chats"
             class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
           >
             Chats
           </router-link>
-          <router-link
-            to="/swipe"
-            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
+          <button
+            @click="handleLogout"
+            class="px-4 py-2 bg-red-500 rounded-full text-white hover:bg-red-600 transition-all"
           >
-            Swipe
-          </router-link>
-          <router-link
-            to="/profile/edit"
-            class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all"
-          >
-            Edit Profile
-          </router-link>
-        </div>
-        <!-- Right Side (optional, e.g., Logout button) -->
-        <div class="flex space-x-4">
-          <!-- Logout button example -->
-          <button class="px-4 py-2 bg-red-500 rounded-full text-white hover:bg-red-600 transition-all">
             Logout
           </button>
         </div>
@@ -54,11 +51,14 @@
             </div>
             
             <div class="flex-1">
-              <h1 class="text-3xl font-bold text-white mb-2">{{ user.email }}</h1>
+              <h1 class="text-3xl font-bold text-white mb-2">{{ user.first_name }} {{ user.last_name }}</h1>
               <p class="text-blue-400">Age: {{ user.age }}</p>
               <p class="text-blue-400">Gender: {{ user.gender }}</p>
               <p class="text-blue-400">Interest: {{ user.interest }}</p>
               <p class="text-blue-400">{{ user.bio }}</p>
+              <button class="mt-4 px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white hover:opacity-90 transition-all">
+                <router-link to="/profile/edit">Edit Profile</router-link>
+              </button>
             </div>
           </div>
 
@@ -136,7 +136,7 @@ const user = reactive({
   bio: '',
   age: 0,
   photo: '',
-  location: 'New York'
+  location: ''
 });
 
 const stats = [
@@ -157,6 +157,25 @@ async function fetchUser() {
   } catch (error) {
     console.error('Error fetching user:', error);
   }
+}
+
+function handleLogout() {
+  const token = localStorage.getItem('token');
+  axios.post('http://localhost:8000/api/v1/auth/logout', {}, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(() => {
+    localStorage.removeItem('token');
+    router.push('/');
+  })
+  .catch(error => {
+    console.error('Logout error:', error.response ? error.response.data : error.message);
+    // Even if the logout API call fails, remove the token and redirect
+    localStorage.removeItem('token');
+    router.push('/');
+  });
 }
 
 onMounted(() => {
